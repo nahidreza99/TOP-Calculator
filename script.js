@@ -34,6 +34,8 @@ var result = 0;
 let currNumber = "";
 let operator = "";
 
+let pending = 0;
+
 let calculator = {
     add: function (x, y){
         return x+y;
@@ -51,40 +53,57 @@ let calculator = {
 
 for(let i=0; i<digit.length; i++){
     digit[i].onclick = function(){
-        if(operator!=""){
-            primary = 0;
-            currNumber ="";
-        }
         changePrimaryDisplay(i.toString());
     }
 }
 
 for(let i=0; i<operation.length;i++){
     operation[i].onclick = function(){
+        if(!pending){
+            storeNumber();
+        }
+        else{
+            if(primary!=0){
+                result = getResult();
+                secondary = result;
+                secondaryDisplay.innerHTML = secondary;
+                primary =0;
+                primaryDisplay.innerHTML = primary;
+                currNumber = "";
+            }
+        }
         changeOperator(i);
-        storeNumber();
     }
 }
 
 equal.onclick = function(){
-    getResult();
-    currNumber = "";
+    result = getResult();
+    pending = 0;
+    secondary = primary;
+    currNumber = primaryDisplay.innerHTML;
+    operator = "";
 }
 
 function getResult(){
     operatorDisplay.innerHTML = "=";
     primary = operate(operator);
     primaryDisplay.innerHTML = primary;
+    return primary;
 }
 
 function storeNumber(){
-    secondary =  parseInt(primary);
+    secondary = parseInt(currNumber);
+    secondaryDisplay.innerHTML = secondary;
+    secondaryDisplay.classList.remove("hidden");
+    primary = 0;
+    currNumber = "";
+    primaryDisplay.innerHTML = primary;
+    pending = 1;
 }
 
 
 
 function changeOperator(value){
-    getResult();
     switch(value){
         case 0:
             operatorDisplay.innerHTML = "+";
