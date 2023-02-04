@@ -51,6 +51,10 @@ let calculator = {
 
 for(let i=0; i<digit.length; i++){
     digit[i].onclick = function(){
+        if(operator!=""){
+            primary = 0;
+            currNumber ="";
+        }
         changePrimaryDisplay(i.toString());
     }
 }
@@ -64,7 +68,7 @@ for(let i=0; i<operation.length;i++){
 
 equal.onclick = function(){
     getResult();
-
+    currNumber = "";
 }
 
 function getResult(){
@@ -75,13 +79,12 @@ function getResult(){
 
 function storeNumber(){
     secondary =  parseInt(primary);
-    primary = 0;
-    currNumber ="";
 }
 
 
 
 function changeOperator(value){
+    getResult();
     switch(value){
         case 0:
             operatorDisplay.innerHTML = "+";
@@ -110,7 +113,10 @@ function changePrimaryDisplay(value){
 }
 
 function operate(value){
-    if(value==="add"){
+    if(value ===""){
+        return calculator.add(primary,0);
+    }
+    else if(value==="add"){
         return calculator.add(secondary, primary);
     }
     else if(value==="subtract"){
