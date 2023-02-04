@@ -19,17 +19,20 @@ const clear = document.getElementById("clear");
 
 const primaryDisplay = document.getElementById("primary");
 const secondaryDisplay = document.getElementById("secondary");
+const operatorDisplay = document.getElementById("operator");
 
 /*var digit = [{name: "zero", value: zero,}, {name:"one", value: one,}, {name: "two", value: two,}, {name: "three", value: three,},
         {name: "four", value: four,}, {name: "five", value: five,}, {name: "six", value: six,}, {name: "seven", value: seven,},
              {name: "eight", value: eight}, {name: "nine", value: nine}];*/
 
 var digit = [zero, one, two, three, four, five, six, seven, eight, nine];
+var operation = [add, subtract, multiply, divide];
 
 var secondary = 0;
 var primary = 0;
 var result = 0;
 let currNumber = "";
+let operator = "";
 
 let calculator = {
     add: function (x, y){
@@ -52,33 +55,75 @@ for(let i=0; i<digit.length; i++){
     }
 }
 
-function changePrimaryDisplay(value){
-    //currNumber = primaryDisplay.innerHTML += 1;
-    //return parseFloat(currNumber);
-    currNumber +=value;
-    primaryDisplay.innerHTML = parseInt(currNumber);
+for(let i=0; i<operation.length;i++){
+    operation[i].onclick = function(){
+        changeOperator(i);
+        storeNumber();
+    }
+}
+
+equal.onclick = function(){
+    getResult();
 
 }
 
-function operate(operator){
-    if(operator==="add"){
-        result = calculator.add(secondary, primary);
-        console.log(result);
+function getResult(){
+    operatorDisplay.innerHTML = "=";
+    primary = operate(operator);
+    primaryDisplay.innerHTML = primary;
+}
+
+function storeNumber(){
+    secondary =  parseInt(primary);
+    primary = 0;
+    currNumber ="";
+}
+
+
+
+function changeOperator(value){
+    switch(value){
+        case 0:
+            operatorDisplay.innerHTML = "+";
+            operator = "add";
+            break;
+        case 1:
+            operatorDisplay.innerHTML = "-";
+            operator = "subtract";
+            break;
+        case 2:
+            operatorDisplay.innerHTML = "x";
+            operator = "multiply";
+            break;
+        case 3:
+            operatorDisplay.innerHTML = "/";
+            operator = "divide";
+            break;
     }
-    else if(operator==="subtract"){
-        result = calculator.subtract(secondary, primary);
-        console.log(result);
+}
+
+function changePrimaryDisplay(value){
+    currNumber +=value;
+    primary = parseInt(currNumber);
+    currNumber = primary.toString();
+    primaryDisplay.innerHTML = currNumber;
+}
+
+function operate(value){
+    if(value==="add"){
+        return calculator.add(secondary, primary);
     }
-    else if(operator==="multiply"){
-        result = calculator.multiply(secondary, primary);
-        console.log(result);
+    else if(value==="subtract"){
+        return calculator.subtract(secondary, primary);
     }
-    else if(operator==="divide"){
-        result = calculator.divide(secondary, primary);
-        console.log(result);
+    else if(value==="multiply"){
+        return calculator.multiply(secondary, primary);
+    }
+    else if(value==="divide"){
+        return calculator.divide(secondary, primary);
     }
     else{
         console.log("no module added");
-        return;
+        return -999;
     }
 }
