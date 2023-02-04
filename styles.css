@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+main{
+    height: 100%;
+}
+
+.container{
+    height: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+.calculator{
+    width: 450px;
+    border-radius: 5px;
+    margin: auto auto;
+    border: 5px solid black;
+    text-align: center;
+}
+
+.screen{
+    display: grid;
+    height: 128px;
+    grid-template-columns: 9fr 9fr 1fr;
+    font-weight: 800;
+    padding: 10px;
+    background-color: rgb(230, 255, 251);
+    text-align: right;
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.screen .secondary{
+    font-size: 1.6rem;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.screen .primary{
+    font-size: 3rem;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.screen .operator{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.calculator>div{
+    border-radius: inherit;
+    border: 1px solid black;
+}
+
+.keypad{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+#zero{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.key{
+    font-size: 1.6rem;
+    font-weight: bold;
+    height: 72px;
+    padding: 50px;
+    background: rgb(89, 146, 172);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+}
