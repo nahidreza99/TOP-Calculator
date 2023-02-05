@@ -16,6 +16,7 @@ const minus = document.getElementById("negative");
 const percent = document.getElementById("percent");
 const equal = document.getElementById("equal");
 const clear = document.getElementById("clear");
+const dot = document.getElementById("dot");
 
 const primaryDisplay = document.getElementById("primary");
 const secondaryDisplay = document.getElementById("secondary");
@@ -33,6 +34,7 @@ var primary = 0;
 var result = 0;
 let currNumber = "";
 let operator = "";
+let enableFloat = false;
 
 let pending = 0;
 
@@ -57,8 +59,14 @@ for(let i=0; i<digit.length; i++){
     }
 }
 
+dot.onclick = function(){
+    enableFloat =true;
+    changePrimaryDisplay(".");
+}
+
 for(let i=0; i<operation.length;i++){
     operation[i].onclick = function(){
+        currNumber = "";
         if(!pending){
             storeNumber();
         }
@@ -80,23 +88,23 @@ equal.onclick = function(){
     result = getResult();
     pending = 0;
     secondary = primary;
-    currNumber = primaryDisplay.innerHTML;
     operator = "";
 }
 
 function getResult(){
     operatorDisplay.innerHTML = "=";
     primary = operate(operator);
+    primary = Math.round(primary * 1000) / 1000;
     primaryDisplay.innerHTML = primary;
+    currNumber = "";
     return primary;
 }
 
 function storeNumber(){
-    secondary = parseInt(currNumber);
+    secondary = primary;
     secondaryDisplay.innerHTML = secondary;
     secondaryDisplay.classList.remove("hidden");
     primary = 0;
-    currNumber = "";
     primaryDisplay.innerHTML = primary;
     pending = 1;
 }
@@ -126,8 +134,7 @@ function changeOperator(value){
 
 function changePrimaryDisplay(value){
     currNumber +=value;
-    primary = parseInt(currNumber);
-    currNumber = primary.toString();
+    primary = parseFloat(currNumber);
     primaryDisplay.innerHTML = currNumber;
 }
 
