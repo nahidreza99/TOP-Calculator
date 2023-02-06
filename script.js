@@ -12,7 +12,7 @@ const add = document.getElementById("add");
 const subtract = document.getElementById("subtract");
 const multiply = document.getElementById("multiply");
 const divide = document.getElementById("divide");
-const minus = document.getElementById("negative");
+const negative = document.getElementById("negative");
 const percent = document.getElementById("percent");
 const equal = document.getElementById("equal");
 const clear = document.getElementById("clear");
@@ -38,16 +38,16 @@ let pending = 0;
 
 let calculator = {
     add: function (x, y){
-        return Math.floor((x+y)*1000)/1000;
+        return Math.round((x+y)*1000)/1000;
     },
     subtract: function(x, y){
-        return Math.floor((x-y)*1000)/1000;
+        return Math.round((x-y)*1000)/1000;
     },
     multiply: function(x, y){
-        return Math.floor((x*y)*1000)/1000;
+        return Math.round((x*y)*1000)/1000;
     },
     divide: function(x, y){
-        return Math.floor((x/y)*1000)/1000;
+        return Math.round((x/y)*1000)/1000;
     },
 }
 
@@ -72,6 +72,12 @@ clear.onclick = function(){
 
 dot.onclick = function(){
     changePrimaryDisplay(".");
+}
+
+negative.onclick = function(){
+    primary = 0-primary;
+    currNumber = primary.toString();
+    primaryDisplay.innerHTML = currNumber;
 }
 
 for(let i=0; i<operation.length;i++){
