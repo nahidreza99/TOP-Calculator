@@ -13,7 +13,7 @@ const subtract = document.getElementById("subtract");
 const multiply = document.getElementById("multiply");
 const divide = document.getElementById("divide");
 const negative = document.getElementById("negative");
-const percent = document.getElementById("percent");
+const percent = document.getElementById("percentage");
 const equal = document.getElementById("equal");
 const clear = document.getElementById("clear");
 const dot = document.getElementById("dot");
@@ -49,6 +49,9 @@ let calculator = {
     divide: function(x, y){
         return Math.round((x/y)*1000)/1000;
     },
+    percentage: function(x){
+        return Math.round((x/100)*1000)/1000;
+    },
 }
 
 resetDisplay();
@@ -78,6 +81,18 @@ negative.onclick = function(){
     primary = 0-primary;
     currNumber = primary.toString();
     primaryDisplay.innerHTML = currNumber;
+}
+
+percent.onclick = function(){
+    changeOperator("%");
+    getPercentage();
+}
+
+function getPercentage(){
+    result = operate("%");
+    primary = result;
+    primaryDisplay.innerHTML = result;
+    currNumber ="";
 }
 
 for(let i=0; i<operation.length;i++){
@@ -113,21 +128,27 @@ function changeOperator(value){
         case 0:
             operatorDisplay.innerHTML = "+";
             operator = "+";
+            pending = 1;
             break;
         case 1:
             operatorDisplay.innerHTML = "-";
             operator = "-";
+            pending = 1;
             break;
         case 2:
             operatorDisplay.innerHTML = "x";
             operator = "*";
+            pending = 1;
             break;
         case 3:
             operatorDisplay.innerHTML = "/";
             operator = "/";
+            pending = 1;
+            break;
+        case "%":
+            operatorDisplay.innerHTML = "%";
             break;
     }
-    pending = 1;
 }
 
 function changePrimaryDisplay(value){
@@ -177,6 +198,9 @@ function operate(value){
     }
     else if(value==="/"){
         return calculator.divide(secondary, primary);
+    }
+    else if(value === "%"){
+        return calculator.percentage(primary);
     }
     else{
         console.log("no module added");
