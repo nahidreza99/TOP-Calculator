@@ -34,24 +34,24 @@ var primary = 0;
 var result = 0;
 let currNumber = "";
 let operator = "";
-let enableFloat = false;
-
 let pending = 0;
 
 let calculator = {
     add: function (x, y){
-        return x+y;
+        return Math.floor((x+y)*1000)/1000;
     },
     subtract: function(x, y){
-        return x-y;
+        return Math.floor((x-y)*1000)/1000;
     },
     multiply: function(x, y){
-        return x*y;
+        return Math.floor((x*y)*1000)/1000;
     },
     divide: function(x, y){
-        return x/y;
+        return Math.floor((x/y)*1000)/1000;
     },
 }
+
+resetDisplay();
 
 for(let i=0; i<digit.length; i++){
     digit[i].onclick = function(){
@@ -59,99 +59,117 @@ for(let i=0; i<digit.length; i++){
     }
 }
 
+clear.onclick = function(){
+    resetDisplay();
+    primary = 0;
+    secondary = 0;
+    operator = "";
+    pending = 0;
+    operatorDisplay.innerHTML = "";
+    secondaryDisplay.innerHTML = "0";
+    secondaryDisplay.classList.add("hidden");
+}
+
 dot.onclick = function(){
-    enableFloat =true;
     changePrimaryDisplay(".");
 }
 
 for(let i=0; i<operation.length;i++){
     operation[i].onclick = function(){
-        currNumber = "";
         if(!pending){
             storeNumber();
         }
         else{
             if(primary!=0){
-                result = getResult();
+                getResult();
                 secondary = result;
                 secondaryDisplay.innerHTML = secondary;
                 primary =0;
-                primaryDisplay.innerHTML = primary;
-                currNumber = "";
             }
         }
         changeOperator(i);
+        resetDisplay();
     }
 }
 
 equal.onclick = function(){
-    result = getResult();
-    pending = 0;
-    secondary = primary;
-    operator = "";
-}
-
-function getResult(){
     operatorDisplay.innerHTML = "=";
-    primary = operate(operator);
-    primary = Math.round(primary * 1000) / 1000;
-    primaryDisplay.innerHTML = primary;
+    getResult();
+}
+
+function resetDisplay(){
     currNumber = "";
-    return primary;
+    primaryDisplay.innerHTML = "0";
 }
-
-function storeNumber(){
-    secondary = primary;
-    secondaryDisplay.innerHTML = secondary;
-    secondaryDisplay.classList.remove("hidden");
-    primary = 0;
-    primaryDisplay.innerHTML = primary;
-    pending = 1;
-}
-
-
 
 function changeOperator(value){
     switch(value){
         case 0:
             operatorDisplay.innerHTML = "+";
-            operator = "add";
+            operator = "+";
             break;
         case 1:
             operatorDisplay.innerHTML = "-";
-            operator = "subtract";
+            operator = "-";
             break;
         case 2:
             operatorDisplay.innerHTML = "x";
-            operator = "multiply";
+            operator = "*";
             break;
         case 3:
             operatorDisplay.innerHTML = "/";
-            operator = "divide";
+            operator = "/";
             break;
     }
+    pending = 1;
 }
 
 function changePrimaryDisplay(value){
+    if(currNumber=="" && value == "0"){
+        return;
+    }
+    if(currNumber=="" && value == "."){
+        currNumber+= "0";
+    }
     currNumber +=value;
-    primary = parseFloat(currNumber);
     primaryDisplay.innerHTML = currNumber;
+    primary = parseFloat(currNumber);
+}
+
+function getResult(){
+    if(operator ==="/" && primary==0){
+        primaryDisplay.innerHTML = "Math error";
+        return;
+    }
+    result = operate(operator);
+    primary = result;
+    primaryDisplay.innerHTML = result;
+    currNumber ="";
+    pending = 0;
+}
+
+function storeNumber(){
+    secondary = primary;
+    primary = 0;
+    secondaryDisplay.innerHTML = secondary;
+    secondaryDisplay.classList.remove("hidden");
+    pending = 1;
 }
 
 function operate(value){
     if(value ===""){
         return calculator.add(primary,0);
     }
-    else if(value==="add"){
+    else if(value==="+"){
         return calculator.add(secondary, primary);
     }
-    else if(value==="subtract"){
+    else if(value==="-"){
         return calculator.subtract(secondary, primary);
     }
-    else if(value==="multiply"){
+    else if(value==="*"){
         return calculator.multiply(secondary, primary);
     }
-    else if(value==="divide"){
+    else if(value==="/"){
         return calculator.divide(secondary, primary);
     }
     else{
