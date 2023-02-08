@@ -35,6 +35,7 @@ var result = 0;
 let currNumber = "";
 let operator = "";
 let pending = 0;
+let enableFloat = 1;
 
 let calculator = {
     add: function (x, y){
@@ -74,7 +75,13 @@ clear.onclick = function(){
 }
 
 dot.onclick = function(){
-    changePrimaryDisplay(".");
+    if(enableFloat){
+        changePrimaryDisplay(".");
+        enableFloat = 0;
+    }
+    else{
+        return;
+    }
 }
 
 negative.onclick = function(){
@@ -105,9 +112,10 @@ for(let i=0; i<operation.length;i++){
                 getResult();
                 secondary = result;
                 secondaryDisplay.innerHTML = secondary;
-                primary =0;
+                primary = 0;
             }
         }
+        enableFloat = 1;
         changeOperator(i);
         resetDisplay();
     }
