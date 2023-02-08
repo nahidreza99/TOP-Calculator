@@ -60,27 +60,80 @@ for(let i=0; i<digit.length; i++){
     }
 }
 
+window.addEventListener('keypress',handleKeyPress)
+
+function handleKeyPress(e){
+    if(e.key>=0 && e.key<=9){
+        changePrimaryDisplay(e.key);
+        return;
+    }
+    if(e.key==='.'){
+        appendDot();
+        return;
+    }
+    if(e.key ==='=' || e.key ==='Enter'){
+        operatorDisplay.innerHTML = "=";
+        getResult();
+        return;
+    }
+    if(e.key === '+' || e.key==='-' || e.key==='*' || e.key === '/'){
+        startOperation(e.key);
+        return;
+    }
+    if(e.key==='%'){
+        changeOperator("%");
+        getPercentage();
+        return;
+    }
+    if(e.key === 'Escape'){
+        cleanMemory();
+        return;
+    }
+    if(e.key === 'Backspace'){
+        deleteDigit();
+        return;
+    }
+} 
+
 clear.onclick = function(){
+    cleanMemory();
+}
+
+function cleanMemory(){
     resetDisplay();
     primary = 0;
     secondary = 0;
     operator = "";
     pending = 0;
+    enableFloat = 1;
     operatorDisplay.innerHTML = "";
     secondaryDisplay.innerHTML = "0";
     secondaryDisplay.classList.add("hidden");
 }
 
 del.onclick = function (){
+    deleteDigit();
+}
+
+function deleteDigit(){
     if(currNumber[currNumber.length-1]=="."){
         enableFloat=1;
     }
     currNumber = currNumber.substring(0,(currNumber.length-1));
     primary = parseFloat(currNumber);
-    primaryDisplay.innerHTML = currNumber;
+    if(currNumber==""){
+        primaryDisplay.innerHTML = "0";
+    }
+    else{
+        primaryDisplay.innerHTML = currNumber;
+    }
 }
 
 dot.onclick = function(){
+    appendDot();
+}
+
+function appendDot(){
     if(enableFloat){
         changePrimaryDisplay(".");
         enableFloat = 0;
@@ -110,21 +163,25 @@ function getPercentage(){
 
 for(let i=0; i<operation.length;i++){
     operation[i].onclick = function(){
-        if(!pending){
-            storeNumber();
-        }
-        else{
-            if(primary!=0){
-                getResult();
-                secondary = result;
-                secondaryDisplay.innerHTML = secondary;
-                primary = 0;
-            }
-        }
-        enableFloat = 1;
-        changeOperator(i);
-        resetDisplay();
+        startOperation(i);
     }
+}
+
+function startOperation(value){
+    if(!pending){
+        storeNumber();
+    }
+    else{
+        if(primary!=0){
+            getResult();
+            secondary = result;
+            secondaryDisplay.innerHTML = secondary;
+            primary = 0;
+        }
+    }
+    enableFloat = 1;
+    changeOperator(value);
+    resetDisplay();
 }
 
 equal.onclick = function(){
@@ -138,30 +195,34 @@ function resetDisplay(){
 }
 
 function changeOperator(value){
-    switch(value){
-        case 0:
-            operatorDisplay.innerHTML = "+";
-            operator = "+";
-            pending = 1;
-            break;
-        case 1:
-            operatorDisplay.innerHTML = "-";
-            operator = "-";
-            pending = 1;
-            break;
-        case 2:
-            operatorDisplay.innerHTML = "x";
-            operator = "*";
-            pending = 1;
-            break;
-        case 3:
-            operatorDisplay.innerHTML = "/";
-            operator = "/";
-            pending = 1;
-            break;
-        case "%":
-            operatorDisplay.innerHTML = "%";
-            break;
+
+    if(value === 0 || value==='+'){
+        operatorDisplay.innerHTML = "+";
+        operator = "+";
+        pending = 1;
+        return;
+    }
+    if(value === 1 || value==='-'){
+        operatorDisplay.innerHTML = "-";
+        operator = "-";
+        pending = 1;
+        return;
+    }
+    if(value === 2 || value==='*'){
+        operatorDisplay.innerHTML = "*";
+        operator = "*";
+        pending = 1;
+        return;
+    }
+    if(value === 3 || value==='/'){
+        operatorDisplay.innerHTML = "/";
+        operator = "/";
+        pending = 1;
+        return;
+    }
+    if(value==='%'){
+        operatorDisplay.innerHTML = "%";
+        return;
     }
 }
 
@@ -187,6 +248,7 @@ function getResult(){
     primaryDisplay.innerHTML = result;
     currNumber ="";
     pending = 0;
+    enableFloat =1;
 }
 
 function storeNumber(){
