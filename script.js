@@ -60,7 +60,7 @@ for(let i=0; i<digit.length; i++){
     }
 }
 
-window.addEventListener('keypress',handleKeyPress)
+window.addEventListener('keydown',handleKeyPress)
 
 function handleKeyPress(e){
     if(e.key>=0 && e.key<=9){
