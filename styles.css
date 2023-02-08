@@ -23,7 +23,7 @@ main{
 
 .calculator{
     width: 450px;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: auto auto;
     border: 5px solid black;
     text-align: center;
@@ -47,12 +47,20 @@ main{
     font-size: 1.6rem;
     grid-column-start: 1;
     grid-column-end: 3;
+
+    display: flex;
+    justify-content: flex-end;
+    overflow-x: hidden;
 }
 
 .screen .primary{
     font-size: 3rem;
     grid-column-start: 1;
     grid-column-end: 3;
+
+    display: flex;
+    justify-content: flex-end;
+    overflow-x: hidden;
 }
 
 .screen .operator{
@@ -63,13 +71,13 @@ main{
 }
 
 .calculator>div{
-    border-radius: inherit;
     border: 1px solid black;
 }
 
 .keypad{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    background-color: #dde1e7;
 }
 
 #zero{
@@ -77,15 +85,25 @@ main{
     grid-column-end: 3;
 }
 
-.key{
+.button{
     font-size: 1.6rem;
     font-weight: bold;
     height: 72px;
-    padding: 50px;
-    background: rgb(89, 146, 172);
-    padding: 10px;
+    margin: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid white;
+    border-radius: 10px;
+    box-shadow: -5px -5px 9px rgba(255,255,255,0.45), 5px 5px 9px rgba(94,104,121,0.3);
 }
+
+#clear{
+    background-color: rgb(180, 0, 0);
+    color: #dde1e7;
+}
+
+.operation{
+    background-color: rgb(51, 0, 80);
+    color: #dde1e7;
+}
+
