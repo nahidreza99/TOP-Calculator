@@ -17,14 +17,11 @@ const percent = document.getElementById("percentage");
 const equal = document.getElementById("equal");
 const clear = document.getElementById("clear");
 const dot = document.getElementById("dot");
+const del = document.getElementById("delete");
 
 const primaryDisplay = document.getElementById("primary");
 const secondaryDisplay = document.getElementById("secondary");
 const operatorDisplay = document.getElementById("operator");
-
-/*var digit = [{name: "zero", value: zero,}, {name:"one", value: one,}, {name: "two", value: two,}, {name: "three", value: three,},
-        {name: "four", value: four,}, {name: "five", value: five,}, {name: "six", value: six,}, {name: "seven", value: seven,},
-             {name: "eight", value: eight}, {name: "nine", value: nine}];*/
 
 var digit = [zero, one, two, three, four, five, six, seven, eight, nine];
 var operation = [add, subtract, multiply, divide];
@@ -72,6 +69,15 @@ clear.onclick = function(){
     operatorDisplay.innerHTML = "";
     secondaryDisplay.innerHTML = "0";
     secondaryDisplay.classList.add("hidden");
+}
+
+del.onclick = function (){
+    if(currNumber[currNumber.length-1]=="."){
+        enableFloat=1;
+    }
+    currNumber = currNumber.substring(0,(currNumber.length-1));
+    primary = parseFloat(currNumber);
+    primaryDisplay.innerHTML = currNumber;
 }
 
 dot.onclick = function(){
